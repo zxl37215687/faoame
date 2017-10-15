@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://cxf.apache.org/jaxws
+       http://cxf.apache.org/schemas/jaxws.xsd
+       http://cxf.apache.org/jaxrs
+       http://cxf.apache.org/schemas/jaxrs.xsd">
+    <!--
+        id:当前服务的唯一标识 address:当前服务对应的请求url serviceClass:接口类型-->
+    <jaxws:server id="soapuser" address="/user" serviceClass="com.lsr.ws.cxf.UserService">
+        <jaxws:serviceBean>
+            <bean class="com.lsr.ws.cxf.UserServiceImpl" />
+        </jaxws:serviceBean>
+    </jaxws:server>
+    
+     <!--
+    <bean id="jaxWsServiceFactoryBean" class="org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean">
+        <property name="wrapped" value="true" />
+    </bean>
+
+     <jaxws:endpoint id="serviceimp" address="/person"
+        implementor="com.lsr.ws.cxf.PersonServiceImp">
+
+        <jaxws:serviceFactory>
+            <ref bean="jaxWsServiceFactoryBean" />
+        </jaxws:serviceFactory>
+    </jaxws:endpoint>
+    -->
+</beans>

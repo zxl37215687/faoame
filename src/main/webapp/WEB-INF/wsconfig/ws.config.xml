@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ws-configuration
+    	PUBLIC "-//WS/WS Configuration DTD//EN"
+    	"http://lsr.cn/ws-config.dtd">
+<wsconfig> 
+	<interceptors-define>
+		<interceptor id="exceptionHandle" type="com.lsr.ws.interceptor.impl.ExceptionHandleInterceptor"/>
+		<interceptor id="sessionValidate" type="com.lsr.ws.interceptor.impl.SessionValidateInterceptor"/>
+		<interceptor id="ztThread" type="com.lsr.ws.interceptor.impl.ThreadInterceptor"/>
+	</interceptors-define>
+
+	<global-define>
+		<interceptors-ref references="exceptionHandle,sessionValidate,ztThread"/>
+	</global-define>
+
+	<config-include>
+		<resource path="wsconfig/service/common.ws.config.xml"/>
+	</config-include>
+</wsconfig>

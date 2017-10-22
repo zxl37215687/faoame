@@ -2,7 +2,7 @@ package com.lsr.frame.ws.context;
 
 import java.util.HashMap;
 
-import com.lsr.frame.base.Session;
+import com.lsr.frame.base.context.Session;
 
 /**
  * WS会话
@@ -45,6 +45,10 @@ public class WSSession<K,V> extends HashMap<K,V> implements Session{
 		return isValid;
 	}
 
+	public void inValid(){
+		isValid = false;
+	}
+	
 	public void setValid(boolean isValid) {
 		this.isValid = isValid;
 	}

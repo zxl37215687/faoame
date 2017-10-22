@@ -1,12 +1,12 @@
 package com.lsr.frame.ws.control;
 
-import com.lsr.frame.base.Action;
+import com.lsr.frame.base.control.Action;
 
 /**
  * WSAction
  * @author kuaihuolin
  *
  */
-public abstract class WSAction implements Action {
+public interface WSAction extends Action {
 
 }

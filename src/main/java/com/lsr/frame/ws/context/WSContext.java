@@ -3,12 +3,10 @@ package com.lsr.frame.ws.context;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.lsr.frame.base.Config;
-import com.lsr.frame.base.Context;
-import com.lsr.frame.base.ResultData;
-import com.lsr.frame.ws.config.WSConfig;
+import com.lsr.frame.base.context.Context;
+import com.lsr.frame.base.utils.StringUtils;
+import com.lsr.frame.ws.config.WSConfiguration;
+import com.lsr.frame.ws.conver.ResultMap;
 import com.lsr.frame.ws.exception.WSConfigException;
 
 /**
@@ -28,8 +26,8 @@ public class WSContext implements Context {
 
 	private static final String CONFIG_INFO = "configInfo";
 
-	private static final String RESULT_DATA = "resultData";
-
+	private static final String CURRENTRESULTMAP = "currentResultMap"; 
+	
 	public WSContext(){}
 	
 	public static WSContext getInstance(){
@@ -65,23 +63,32 @@ public class WSContext implements Context {
 		this.getThreadContext().put(SESSION_VALID_CODE,sessionValidCode);
 	}
 	
-	public ResultData getResultData(){
-		ResultData resultData = (ResultData) this.getThreadContext().get(RESULT_DATA);
-		
-		if(resultData == null){
-			resultData = new ResultData();
-			this.getThreadContext().put(RESULT_DATA, resultData);
-		}
-		
-		return resultData;
+	public ResultMap getCurrentResultMap(){
+		Map context = getThreadContext();
+		if(context.get(CURRENTRESULTMAP) == null){
+			context.put(CURRENTRESULTMAP, ResultMap.createResult());
+		} 
+		return (ResultMap) context.get(CURRENTRESULTMAP);
 	}
 	
-	public Config getConfig(){
-		Config config = (WSConfig) this.getStaticContext().get(CONFIG_INFO);
+	public WSConfiguration getWSConfiguration(){
+		WSConfiguration config = (WSConfiguration) this.getStaticContext().get(CONFIG_INFO);
 		if(config == null){
 			throw new WSConfigException("ws config info is null,please config!");
 		}
 		return config;
+	}
+
+
+	public void clearThreadContext(){
+		getThreadContext().clear();
+		THREAD_CONTEXT.set(null);
+	}
+
+	public void setWSConfiguration(WSConfiguration configuration) {
+		if(STATIC_CONTEXT.get(CONFIG_INFO) == null){
+			STATIC_CONTEXT.put(CONFIG_INFO, configuration);
+		}
 	}
 	
 }

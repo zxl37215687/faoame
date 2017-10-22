@@ -1,5 +1,10 @@
 package com.lsr.frame.ws.exception;
 
+/**
+ * 
+ * @author kuaihuolin
+ *
+ */
 public class WSRuntimeException extends RuntimeException{
 	
 	private static final long serialVersionUID = 3932959025529679207L;

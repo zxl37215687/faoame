@@ -6,8 +6,9 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.lsr.frame.base.Session;
-import com.lsr.frame.base.SessionContext;
+import com.lsr.frame.base.context.Session;
+import com.lsr.frame.base.context.SessionContext;
+import com.lsr.frame.ws.utils.CxfUtil;
 
 /**
  * WS会话环境
@@ -58,6 +59,10 @@ public class WSSessionContext implements SessionContext{
 		return session;
 	}
 
+	public Session createSession(){
+		return createSession(CxfUtil.getRequestedSessionId());
+	}
+	
 	@Override
 	public void removeSession(String sessionId) {
 		synchronized (sessionId) {

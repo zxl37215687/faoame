@@ -1,31 +1,61 @@
 package com.lsr.frame.ws.common;
 
-import com.lsr.frame.base.Service;
-import com.lsr.frame.base.Session;
-import com.lsr.frame.ws.context.WSContext;
+import com.lsr.frame.base.context.SpringContextHolder;
+import com.lsr.frame.base.service.Service;
+import com.lsr.frame.ws.context.WSSession;
 import com.lsr.frame.ws.context.WSSessionContext;
+import com.lsr.frame.ws.conver.Convertor;
+import com.lsr.frame.ws.conver.ConvertorFactory;
+import com.lsr.frame.ws.utils.CxfUtil;
 
 
 /**
- * WebService
+ * WebService 
+ * 对外发布的接口均需继承该类
  * @author kuaihuolin
  *
  */
-public abstract class WSService implements Service {
+public abstract class WSService  {
 	
 	/**
-	 * 获取会话
+	 * 获得本地Service
+	 * @param beanId
 	 * @return
 	 */
-	public Session getSession(){
-		return WSSessionContext.getInstance().getCurrentSession();
+	protected Service getService(String beanId){
+		return SpringContextHolder.getBean(beanId);
 	}
 	
 	/**
-	 * 获取客户端IP
+	 * 获得数据转换器
 	 * @return
 	 */
-	public String getClientAddr(){
-		return "";
+	protected Convertor getConvertor(){ 
+		return ConvertorFactory.getDefaultConvertor();
+	}
+	
+	/**
+	 * 获得数据转换器
+	 * @param clazz
+	 * @return
+	 */
+	protected Convertor getConvertor(Class clazz){ 
+		return ConvertorFactory.getConvertor(clazz);
+	}
+	
+	/**
+	 * 获得当前会话
+	 * @return
+	 */
+	protected WSSession getSession(){
+		return (WSSession) WSSessionContext.getInstance().getCurrentSession();
+	}
+	
+	/**
+	 * 获得远程客户端IP
+	 * @return
+	 */
+	protected String getRemoteAddr(){
+		return CxfUtil.getRemoteAddr();
 	}
 }

@@ -61,6 +61,18 @@
            <version>1.6</version>  
        </dependency>  
          
+       <dependency>
+		    <groupId>commons-beanutils</groupId>
+		    <artifactId>commons-beanutils</artifactId>
+		    <version>1.8.3</version>
+		</dependency>
+         
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.4</version>
+		</dependency>  
+         
        <!-- log4j -->  
        <dependency>  
            <groupId>log4j</groupId>  
@@ -87,19 +99,13 @@
  			<version>4.0</version>
        </dependency>  
        
-       <!-- jstl -->  
-       <dependency>  
-           <groupId>javax.servlet</groupId>  
-           <artifactId>jstl</artifactId>  
-           <version>1.2</version>  
-       </dependency>  
-       <dependency>  
-           <groupId>javax.servlet.jsp</groupId>  
-           <artifactId>jsp-api</artifactId>  
-           <version>2.2.1-b03</version>  
-           <scope>provided</scope>  
-       </dependency>  
-         
+		<dependency>
+		    <groupId>commons-digester</groupId>
+		    <artifactId>commons-digester</artifactId>
+		    <version>2.1</version>
+		</dependency>
+       
+       
        <!-- 文件上传 -->  
        <dependency>  
            <groupId>commons-fileupload</groupId>  
@@ -227,13 +233,16 @@
         <finalName>faoame</finalName>  
         <plugins>  
             <plugin>  
+            	<groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>  
             </plugin>  
             <plugin>  
+            	<groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>  
                 <configuration>  
                     <source>1.7</source>  
-                    <target>1.7</target>  
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>  
                 </configuration>  
             </plugin>  
         </plugins>  

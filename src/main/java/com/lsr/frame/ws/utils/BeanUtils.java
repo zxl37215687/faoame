@@ -14,29 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BeanUtils {
-	private static String dbType = "db2";
-
-    /**
-     * @param dbtype 要设置的 dbtype。
-     */
-    public static void setDbtype(String dbtype) {
-        dbType = dbtype;
-    }
-
-    public static boolean isOracle() {
-        if ("oracle".equalsIgnoreCase(dbType)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static int getDebug() {
-        return debug;
-    }
-
-    public static void setDebug(int newDebug) {
-        debug = newDebug;
-    }
 
     public static Map describe(Object bean) throws IllegalAccessException,
             InvocationTargetException, NoSuchMethodException {

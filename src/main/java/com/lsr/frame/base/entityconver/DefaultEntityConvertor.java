@@ -47,25 +47,25 @@ public class DefaultEntityConvertor implements EntityConver {
 
 		VOInterface vo = (VOInterface) this.getInstance(voClass.getName());
 
-		for (Field field : voClass.getDeclaredFields()) {
-			String voPropertyName = field.getName();
-			if (field.isAnnotationPresent(BindFileldName.class)) {
-				BindFileldName bindFileldName = field
-						.getAnnotation(BindFileldName.class);
-				try {
-					String poPropertyName = bindFileldName.value();
-					Object poValue = BeanUtils.getProperty(po, poPropertyName);
-					Object voValue = toVOValue(poValue,
-							bindFileldName.dataType());
-					BeanUtils.setProperty(vo, voPropertyName, voValue);
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
+		try {
+			for (Field field : voClass.getDeclaredFields()) {
+				String voPropertyName = field.getName();
+				if (field.isAnnotationPresent(BindFileldName.class)) {
+					BindFileldName bindFileldName = field
+							.getAnnotation(BindFileldName.class);
+						String poPropertyName = bindFileldName.value();
+						Object poValue = BeanUtils.getProperty(po, poPropertyName);
+						Object voValue = toVOValue(poValue,
+								bindFileldName.dataType());
+						BeanUtils.setProperty(vo, voPropertyName, voValue);
 				}
 			}
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
 		}
 		return (T) vo;
 	}
@@ -82,63 +82,62 @@ public class DefaultEntityConvertor implements EntityConver {
 		Class<?> poClass = bindEntity.value();
 		BasePO po = (BasePO) getInstance(poClass.getName());
 
-		for (Field field : voClass.getDeclaredFields()) {
-			String voPropertyName = field.getName();
-			if (field.isAnnotationPresent(BindFileldName.class)) {
-				BindFileldName bindFileldName = field
-						.getAnnotation(BindFileldName.class);
-				try {
-					Object voValue = BeanUtils.getProperty(vo, voPropertyName);
-					String poPropertyName = bindFileldName.value();
-					int idx = poPropertyName.indexOf('.');
-					if (idx != -1) {
-						if (voValue != null && !"".equals(voValue)) {
-							Object obj = po;
-							do {
-								String propertyName = upperFirst(poPropertyName
-										.substring(0, idx));
-								Class objClass = obj.getClass();
-								Method propertyGetter = objClass.getMethod(
-										"get" + propertyName, null);
-								Object property;
-								property = propertyGetter.invoke(obj, null);
-								if (property == null) {
-									Class propertyClass = propertyGetter
-											.getReturnType();
-									property = propertyClass.newInstance();
-									Method propertySetter = objClass.getMethod(
-											"set" + propertyName,
-											new Class[] { propertyClass });
-									propertySetter.invoke(obj,
-											new Object[] { property });
-								}
-								obj = property;
-								poPropertyName = poPropertyName
-										.substring(idx + 1);
-								idx = poPropertyName.indexOf('.');
-							} while (idx != -1);
+		try {
+			for (Field field : voClass.getDeclaredFields()) {
+				String voPropertyName = field.getName();
+				if (field.isAnnotationPresent(BindFileldName.class)) {
+					BindFileldName bindFileldName = field
+							.getAnnotation(BindFileldName.class);
+						Object voValue = BeanUtils.getProperty(vo, voPropertyName);
+						String poPropertyName = bindFileldName.value();
+						int idx = poPropertyName.indexOf('.');
+						if (idx != -1) {
+							if (voValue != null && !"".equals(voValue)) {
+								Object obj = po;
+								do {
+									String propertyName = upperFirst(poPropertyName
+											.substring(0, idx));
+									Class objClass = obj.getClass();
+									Method propertyGetter = objClass.getMethod(
+											"get" + propertyName, null);
+									Object property;
+									property = propertyGetter.invoke(obj, null);
+									if (property == null) {
+										Class propertyClass = propertyGetter
+												.getReturnType();
+										property = propertyClass.newInstance();
+										Method propertySetter = objClass.getMethod(
+												"set" + propertyName,
+												new Class[] { propertyClass });
+										propertySetter.invoke(obj,
+												new Object[] { property });
+									}
+									obj = property;
+									poPropertyName = poPropertyName
+											.substring(idx + 1);
+									idx = poPropertyName.indexOf('.');
+								} while (idx != -1);
+								Object poValue = toPoValue(voValue,
+										bindFileldName.dataType());
+								BeanUtils.setSimpleProperty(obj, poPropertyName,
+										poValue);
+							}
+						} else {
 							Object poValue = toPoValue(voValue,
 									bindFileldName.dataType());
-							BeanUtils.setSimpleProperty(obj, poPropertyName,
-									poValue);
+							BeanUtils
+									.setSimpleProperty(po, poPropertyName, poValue);
 						}
-					} else {
-						Object poValue = toPoValue(voValue,
-								bindFileldName.dataType());
-						BeanUtils
-								.setSimpleProperty(po, poPropertyName, poValue);
-					}
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
-			// po.setDetailProperty((BaseVO)vo);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return po;
 	}

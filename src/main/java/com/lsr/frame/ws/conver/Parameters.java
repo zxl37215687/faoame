@@ -14,7 +14,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.lsr.frame.ws.common.WSConstant;
-import com.lsr.sysman.file.FileService;
+import com.lsr.frame.ws.wsservice.FileService;
 
 
 public class Parameters implements Serializable {

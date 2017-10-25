@@ -1,4 +1,4 @@
-package com.lsr.sysman.login;
+package com.lsr.frame.ws.wsservice;
 
 import javax.jws.WebService;
 

@@ -1,4 +1,4 @@
-package com.lsr.sysman.file;
+package com.lsr.frame.ws.wsservice;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

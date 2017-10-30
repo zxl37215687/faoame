@@ -16,12 +16,23 @@
 
 <dependencies>
        <!-- junit  -->  
-       <dependency>  
+        <dependency>  
            <groupId>junit</groupId>  
            <artifactId>junit</artifactId>  
            <version>3.8.2</version>  
            <scope>test</scope>  
-       </dependency> 
+        </dependency> 
+		<dependency>
+		    <groupId>com.github.drtrang</groupId>
+		    <artifactId>copiers</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.esotericsoftware</groupId>
+		    <artifactId>reflectasm</artifactId>
+		    <version>1.11.3</version>
+		</dependency>
          
        <!-- servlet -->  
        <dependency>  

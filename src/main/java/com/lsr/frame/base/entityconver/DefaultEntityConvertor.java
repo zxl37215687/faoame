@@ -32,7 +32,13 @@ import com.sun.xml.txw2.IllegalAnnotationException;
 public class DefaultEntityConvertor implements EntityConver {
 	private static final Log log = LogFactory
 			.getLog(DefaultEntityConvertor.class);
-
+	
+	private static DefaultEntityConvertor instance = new DefaultEntityConvertor();
+	
+	public static DefaultEntityConvertor getInstance(){
+		return instance;
+	}
+	
 	@Override
 	public <T> T copyPoToVo(BasePO po, Class<T> voClass) {
 		if(!VOInterface.class.isAssignableFrom(voClass)){
@@ -50,9 +56,9 @@ public class DefaultEntityConvertor implements EntityConver {
 		try {
 			for (Field field : voClass.getDeclaredFields()) {
 				String voPropertyName = field.getName();
-				if (field.isAnnotationPresent(BindFileldName.class)) {
-					BindFileldName bindFileldName = field
-							.getAnnotation(BindFileldName.class);
+				if (field.isAnnotationPresent(BindFieldName.class)) {
+					BindFieldName bindFileldName = field
+							.getAnnotation(BindFieldName.class);
 						String poPropertyName = bindFileldName.value();
 						Object poValue = BeanUtils.getProperty(po, poPropertyName);
 						Object voValue = toVOValue(poValue,
@@ -85,9 +91,9 @@ public class DefaultEntityConvertor implements EntityConver {
 		try {
 			for (Field field : voClass.getDeclaredFields()) {
 				String voPropertyName = field.getName();
-				if (field.isAnnotationPresent(BindFileldName.class)) {
-					BindFileldName bindFileldName = field
-							.getAnnotation(BindFileldName.class);
+				if (field.isAnnotationPresent(BindFieldName.class)) {
+					BindFieldName bindFileldName = field
+							.getAnnotation(BindFieldName.class);
 						Object voValue = BeanUtils.getProperty(vo, voPropertyName);
 						String poPropertyName = bindFileldName.value();
 						int idx = poPropertyName.indexOf('.');

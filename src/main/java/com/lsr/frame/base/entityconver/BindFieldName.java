@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface BindFileldName {
+public @interface BindFieldName {
 	String value();
 	DataType dataType() default DataType.STRING;
 }

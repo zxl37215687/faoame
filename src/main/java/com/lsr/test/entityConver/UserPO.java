@@ -29,7 +29,16 @@ public class UserPO extends BasePO{
 	private Double dou;
 	private Float flo;
 	
+	private OrgPO org;
 	
+	public OrgPO getOrg() {
+		return org;
+	}
+
+	public void setOrg(OrgPO org) {
+		this.org = org;
+	}
+
 	public Short getShortv() {
 		return shortv;
 	}

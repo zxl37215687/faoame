@@ -1,5 +1,6 @@
 package com.lsr.test.entityConver;
 
+import com.lsr.frame.base.condition.DataTypes;
 import com.lsr.frame.base.entityconver.BaseVO;
 import com.lsr.frame.base.entityconver.BindEntity;
 import com.lsr.frame.base.entityconver.BindFieldName;
@@ -49,8 +50,28 @@ public class UserVO extends BaseVO{
 	@BindFieldName(value="flo",dataType=DataType.FLOAT)
 	private String flo;
 	
+	@BindFieldName(value="org.name",dataType = DataType.STRING)
+	private String orgName;
 	
+	@BindFieldName(value="org.type.name",dataType=DataType.STRING)
+	private String orgTypeName;
 	
+	public String getOrgTypeName() {
+		return orgTypeName;
+	}
+
+	public void setOrgTypeName(String orgTypeName) {
+		this.orgTypeName = orgTypeName;
+	}
+
+	public String getOrgName() {
+		return orgName;
+	}
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+
 	public String getShortv() {
 		return shortv;
 	}
@@ -153,7 +174,9 @@ public class UserVO extends BaseVO{
 				+"bigDecimal==>"+this.bigDecimal+"\n" 
 				+"flag==>"+this.flag+"\n" 
 				+"dou==>"+this.dou+"\n" 
-				+"flo==>"+this.flo
+				+"flo==>"+this.flo+"\n" 
+				+"orgName==>"+this.orgName+"\n" 
+				+"orgTypeName==>"+this.orgTypeName
 				;
 	}
 	

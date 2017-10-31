@@ -10,23 +10,37 @@ public class EntityConverInfo {
 	/**
 	 * po属性名
 	 */
-	private String poPropertyName;
+	private String[] poPropertyName;
 	/**
 	 * po属性Getter方法
 	 */
-	private String poPropertyGetMethodName;
+	private String[] poPropertyGetMethodName;
 	/**
-	 * po属性Getter方法index
+	 * po属性Getter方法index,如a.b.c，则对应getA()方法index,getB()方法index,getC()方法index
 	 */
-	private int poPropertyGetMethodIndex;
+	private int[] poPropertyGetMethodIndex;
 	/**
 	 * po属性Setter方法
 	 */
-	private String poPropertySetMethodName;
+	private String[] poPropertySetMethodName;
 	/**
 	 * po属性Setter方法index
 	 */
-	private int poPropertySetMethodIndex;
+	private int[] poPropertySetMethodIndex;
+	
+	/**
+	 * po属性类型
+	 */
+	private Class[] poPropertyClassType;
+	
+	public Class[] getPoPropertyClassType() {
+		return poPropertyClassType;
+	}
+
+	public void setPoPropertyClassType(Class[] poPropertyClassType) {
+		this.poPropertyClassType = poPropertyClassType;
+	}
+
 	/**
 	 * po属性类型
 	 */
@@ -57,6 +71,7 @@ public class EntityConverInfo {
 	 * vo属性Setter方法index
 	 */
 	private int voPropertySetMethodIndex;
+	
 	/**
 	 * vo属性类型
 	 */
@@ -83,21 +98,14 @@ public class EntityConverInfo {
 		this.voPropertyNameIndex = voPropertyNameIndex;
 	}
 
-	public int getPoPropertyGetMethodIndex() {
+	public int[] getPoPropertyGetMethodIndex() {
 		return poPropertyGetMethodIndex;
 	}
 
-	public void setPoPropertyGetMethodIndex(int poPropertyGetMethodIndex) {
+	public void setPoPropertyGetMethodIndex(int[] poPropertyGetMethodIndex) {
 		this.poPropertyGetMethodIndex = poPropertyGetMethodIndex;
 	}
 
-	public int getPoPropertySetMethodIndex() {
-		return poPropertySetMethodIndex;
-	}
-
-	public void setPoPropertySetMethodIndex(int poPropertySetMethodIndex) {
-		this.poPropertySetMethodIndex = poPropertySetMethodIndex;
-	}
 
 	public int getVoPropertyGetMethodIndex() {
 		return voPropertyGetMethodIndex;
@@ -115,13 +123,6 @@ public class EntityConverInfo {
 		this.voPropertySetMethodIndex = voPropertySetMethodIndex;
 	}
 
-	public String getPoPropertyName() {
-		return poPropertyName;
-	}
-
-	public void setPoPropertyName(String poPropertyName) {
-		this.poPropertyName = poPropertyName;
-	}
 
 	public String getVoPropertyName() {
 		return voPropertyName;
@@ -131,20 +132,12 @@ public class EntityConverInfo {
 		this.voPropertyName = voPropertyName;
 	}
 
-	public String getPoPropertyGetMethodName() {
+	public String[] getPoPropertyGetMethodName() {
 		return poPropertyGetMethodName;
 	}
 
-	public void setPoPropertyGetMethodName(String poPropertyGetMethodName) {
+	public void setPoPropertyGetMethodName(String[] poPropertyGetMethodName) {
 		this.poPropertyGetMethodName = poPropertyGetMethodName;
-	}
-
-	public String getPoPropertySetMethodName() {
-		return poPropertySetMethodName;
-	}
-
-	public void setPoPropertySetMethodName(String poPropertySetMethodName) {
-		this.poPropertySetMethodName = poPropertySetMethodName;
 	}
 
 	public String getVoPropertyGetMethodName() {
@@ -177,6 +170,30 @@ public class EntityConverInfo {
 
 	public void setVoPropertyType(DataType voPropertyType) {
 		this.voPropertyType = voPropertyType;
+	}
+
+	public String[] getPoPropertyName() {
+		return poPropertyName;
+	}
+
+	public void setPoPropertyName(String[] poPropertyName) {
+		this.poPropertyName = poPropertyName;
+	}
+
+	public String[] getPoPropertySetMethodName() {
+		return poPropertySetMethodName;
+	}
+
+	public void setPoPropertySetMethodName(String[] poPropertySetMethodName) {
+		this.poPropertySetMethodName = poPropertySetMethodName;
+	}
+
+	public int[] getPoPropertySetMethodIndex() {
+		return poPropertySetMethodIndex;
+	}
+
+	public void setPoPropertySetMethodIndex(int[] poPropertySetMethodIndex) {
+		this.poPropertySetMethodIndex = poPropertySetMethodIndex;
 	}
 
 }

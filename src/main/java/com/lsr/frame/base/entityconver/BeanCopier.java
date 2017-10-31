@@ -24,6 +24,8 @@ import com.esotericsoftware.reflectasm.FieldAccess;
 import com.esotericsoftware.reflectasm.MethodAccess;
 import com.lsr.frame.ws.utils.BeanUtils;
 import com.lsr.frame.ws.utils.DateUtils;
+import com.lsr.test.entityConver.OrgPO;
+import com.lsr.test.entityConver.OrgTypePO;
 import com.lsr.test.entityConver.UserPO;
 import com.lsr.test.entityConver.UserVO;
 import com.sun.xml.txw2.IllegalAnnotationException;
@@ -171,7 +173,23 @@ public class BeanCopier {
 			List<EntityConverInfo> entityConverInfoList) {
 		try {
 			for (EntityConverInfo entityInfo : entityConverInfoList) {
-				Object value = poMethodAccess.invoke(source,entityInfo.getPoPropertyGetMethodIndex());
+				String[] poPropertyNames = entityInfo.getPoPropertyName();
+				int[] poProGetMethodIndexs = entityInfo.getPoPropertyGetMethodIndex();
+				Class[] poPropertyClassType = entityInfo.getPoPropertyClassType();
+				int size = poPropertyNames.length;
+				Object value = source;
+				MethodAccess tempMethodAccess = poMethodAccess;
+				for(int i = 0; i < size; i++){
+					value = tempMethodAccess.invoke(value, poProGetMethodIndexs[i]);
+					if((i+1) != size)
+						tempMethodAccess = getMethodAccess(poPropertyClassType[i]);
+					if(value == null){
+						break;
+					}
+				}
+				if(value == null)
+					continue;
+				//Object value = poMethodAccess.invoke(source,entityInfo.getPoPropertyGetMethodIndex());
 				DataType dataType = entityInfo.getPoPropertyType();
 				Object v = toVoValue(value, dataType);
 				voMethodAccess.invoke(t,entityInfo.getVoPropertySetMethodIndex(), v);
@@ -186,26 +204,44 @@ public class BeanCopier {
 		List<EntityConverInfo> entityConverInfoList = entityMetadataCache.get(targetClass.toString());
 		if (entityConverInfoList == null) {
 			entityConverInfoList = new ArrayList<EntityConverInfo>();
-			entityMetadataCache.put(targetClass.toString(),
-					entityConverInfoList);
+			entityMetadataCache.put(targetClass.toString(),entityConverInfoList);
 			for (Field field : targetClass.getDeclaredFields()) {
 				if (field.isAnnotationPresent(BindFieldName.class)) {
 					BindFieldName bindFieldName = field.getAnnotation(BindFieldName.class);
-
 					EntityConverInfo meta = new EntityConverInfo();
-
-					String poPropertyName = bindFieldName.value();
-					meta.setPoPropertyName(poPropertyName);
-					meta.setPoPropertyGetMethodName(BeanUtils
-							.getGetterMethodName(poPropertyName,
-									bindFieldName.dataType().toString()));
-					meta.setPoPropertyGetMethodIndex(poMethodAccess
-							.getIndex(meta.getPoPropertyGetMethodName()));
-					meta.setPoPropertySetMethodName(BeanUtils
-							.getSetterMethodName(poPropertyName));
-					meta.setPoPropertySetMethodIndex(poMethodAccess
-							.getIndex(meta.getPoPropertySetMethodName()));
+					
+					String poPropertyName = bindFieldName.value();//a 或 a.b 或  a.b.c
+					String[] poProNames = poPropertyName.split("\\.");
+					int size = poProNames.length;
+					int[] getMethodIndexs = new int[size];
+					int[] setMethodIndexs = new int[size];
+					String[] poProGetMethodNames = new String[size];
+					String[] poProSetMethodNames = new String[size];
+					Class[] poProClassType = new Class[size];
+					MethodAccess tempMethodAccess = poMethodAccess;
+					for(int i = 0; i < size; i++){
+						String poProName = poProNames[i];
+						
+						String getMethodName_ = BeanUtils.getGetterMethodName(poProName,bindFieldName.dataType().toString());
+						String setMethodName_ = BeanUtils.getSetterMethodName(poProName);
+						poProGetMethodNames[i] = getMethodName_;
+						poProSetMethodNames[i] = setMethodName_;
+						
+						getMethodIndexs[i] = tempMethodAccess.getIndex(getMethodName_);
+						setMethodIndexs[i] = tempMethodAccess.getIndex(setMethodName_);
+						
+						poProClassType[i] = tempMethodAccess.getReturnTypes()[getMethodIndexs[i]];
+						if((i+1) != size){
+							tempMethodAccess = getMethodAccess(poProClassType[i]);
+						}
+					}
+					meta.setPoPropertyName(poProNames);
+					meta.setPoPropertyGetMethodName(poProGetMethodNames);
+					meta.setPoPropertyGetMethodIndex(getMethodIndexs);
+					meta.setPoPropertySetMethodName(poProSetMethodNames);
+					meta.setPoPropertySetMethodIndex(setMethodIndexs);
 					meta.setPoPropertyType(bindFieldName.dataType());
+					meta.setPoPropertyClassType(poProClassType);
 
 					String voPropertyName = field.getName();
 					meta.setVoPropertyName(voPropertyName);
@@ -361,7 +397,15 @@ public class BeanCopier {
 		po.setFlag(true);
 		po.setDou(new Double(100.2222));
 		po.setFlo(new Float(100.11));
-
+		OrgPO org = new OrgPO();
+		org.setId("23");
+		org.setName("边检站");
+		po.setOrg(org);
+		OrgTypePO type = new OrgTypePO();
+		type.setId("33");
+		type.setName("基层单位");
+		type.setCode("001001");
+		org.setType(type);
 		UserVO vo = copyProperties(po, UserVO.class);
 		System.out.println(vo);
 
@@ -407,7 +451,7 @@ public class BeanCopier {
 
 	}
 	
-	private static void testReflectAsm4Index() throws InstantiationException,
+	private static void testReflectAsm4Index(int num) throws InstantiationException,
 			IllegalAccessException {
 		UserPO po = new UserPO("11", "22", "33");
 		po.setAge(new Integer(18));
@@ -420,12 +464,20 @@ public class BeanCopier {
 		po.setFlag(true);
 		po.setDou(new Double(100.2222));
 		po.setFlo(new Float(100.11));
+		System.out.println("第一次");
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 100000; i++) {
+		for (int i = 0; i < num; i++) {
 			copyProperties(po, UserVO.class);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println("timeout=" + (end - start));// 12 15 23 14 24
+		System.out.println("第二次");
+		long start2 = System.currentTimeMillis();
+		for (int i = 0; i < num; i++) {
+			copyProperties(po, UserVO.class);
+		}
+		long end2 = System.currentTimeMillis();
+		System.out.println("timeout=" + (end2 - start2));// 12 15 23 14 24
 		
 	}
 
@@ -456,8 +508,8 @@ public class BeanCopier {
 	 */
 	public static void main(String[] args) throws InstantiationException,
 			IllegalAccessException {
-		 //testPOtoVO();
-		//testReflectAsm4Index();//无类型转换，10万条数据：timeout=238ms,232ms,227ms ||| 100万条数据：1255ms,1224ms,1216ms |||1000万条数据： 10112ms
+		 testPOtoVO();
+		//testReflectAsm4Index(100000);//无类型转换，10万条数据：timeout=238ms,232ms,227ms ||| 100万条数据：1255ms,1224ms,1216ms |||1000万条数据： 10112ms
 		
 		//testReflectAsm4Index();//添加类型转换，10万条数据：1014，
 		
@@ -466,7 +518,7 @@ public class BeanCopier {
 		//A-->10万条数据:第一次timeout=1454第二次timeout=562
 		//B-->10万条数据:第一次timeout=1406第二次timeout=547
 		//C-->10万条数据:第一次timeout=1421第二次timeout=562
-		 testReflectAsm4IndexList(100000);
+		 //testReflectAsm4IndexList(100000);
 		 
 	}
 

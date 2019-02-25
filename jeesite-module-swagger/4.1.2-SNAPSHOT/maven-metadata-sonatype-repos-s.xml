@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>com.jeesite</groupId>
+  <artifactId>jeesite-module-swagger</artifactId>
+  <version>4.1.2-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20181222.115924</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20181222115924</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>4.1.2-20181222.115924-1</value>
+        <updated>20181222115924</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>4.1.2-20181222.115924-1</value>
+        <updated>20181222115924</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
